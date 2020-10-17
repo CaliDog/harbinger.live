@@ -1,0 +1,6 @@
+node_modules/
+
+dist/
+
+harbinger-server/_build
+harbinger-server/deps
