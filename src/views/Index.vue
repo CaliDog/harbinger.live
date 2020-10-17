@@ -1,17 +1,13 @@
 <template>
   <div class="index is-dark">
     <div class="titles container">
-      <h1 class="title has-text-white is-1">Harbinger Oracle</h1>
-      <h2 class="subtitle has-text-white">Defi on the Tezos Blockchain 🚀</h2>
+      <h1 class="title has-text-white is-1">Harbinger Price Oracle ⚖️</h1>
+      <h2 class="subtitle has-text-white">Enabling Defi on the <span class="inline-icon"><img src="../assets/XTZ-USD.png"></span>Tezos Blockchain</h2>
     </div>
     <div class="container is-flex">
       <div class="box ticker-info">
-        <h2 class="title is-3 has-text-centered">Live Oracle Data</h2>
-        <h2 class="subtitle is-6 has-text-centered links">
-          <a target="_blank" href="https://better-call.dev/mainnet/KT1Jr5t9UvGiqkvvsuUbPJHaYx24NzdUwNW9/operations">View Contract</a>
-          <a target="_blank" href="https://better-call.dev/mainnet/KT1Jr5t9UvGiqkvvsuUbPJHaYx24NzdUwNW9/storage">Contract Data</a>
-          <a target="_blank" href="https://github.com/tacoinfra/harbinger-contracts">Harbinger Github</a>
-        </h2>
+        <h2 class="title is-3 has-text-centered">Latest Prices</h2>
+
         <table class="table is-hoverable is-fullwidth">
           <tbody>
             <tr class="pair-info" :key="pair[0]" v-for="pair in sorted($store.prices)">
@@ -27,6 +23,11 @@
             </tr>
           </tbody>
         </table>
+        <h2 class="subtitle is-6 has-text-centered links">
+          <a target="_blank" href="https://better-call.dev/mainnet/KT1Jr5t9UvGiqkvvsuUbPJHaYx24NzdUwNW9/operations">View Contract</a>
+          <a target="_blank" href="https://better-call.dev/mainnet/KT1Jr5t9UvGiqkvvsuUbPJHaYx24NzdUwNW9/storage">Contract Data</a>
+          <a target="_blank" href="https://github.com/tacoinfra/harbinger-contracts">Harbinger Github</a>
+        </h2>
       </div>
     </div>
   </div>
@@ -73,13 +74,18 @@ export default {
     padding: 3rem;
     .titles{
       max-width: 50vw;
-      margin-bottom: 1rem;
+      margin-bottom: 2rem;
     }
     .container.is-flex{
       justify-content: center;
     }
     .links a{
       padding: 1rem;
+    }
+    .inline-icon img{
+      max-width: 1rem;
+      margin-right: .15rem;
+      margin-bottom: -1px;
     }
     .ticker-info{
       min-width: 30rem;
