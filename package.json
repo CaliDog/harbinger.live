@@ -12,6 +12,7 @@
     "bulma": "^0.8.2",
     "core-js": "^3.6.5",
     "lodash": "^4.17.20",
+    "moment": "^2.29.1",
     "reconnecting-websocket": "^4.4.0",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0"

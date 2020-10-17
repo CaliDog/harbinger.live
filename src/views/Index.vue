@@ -6,7 +6,7 @@
     </div>
     <div class="container is-flex">
       <div class="box ticker-info">
-        <h2 class="title is-3 has-text-centered">Latest Prices</h2>
+        <h2 class="title is-3 has-text-centered is-marginless">Latest Prices</h2>
 
         <table class="table is-hoverable is-fullwidth">
           <tbody>
@@ -28,6 +28,7 @@
           <a target="_blank" href="https://better-call.dev/mainnet/KT1Jr5t9UvGiqkvvsuUbPJHaYx24NzdUwNW9/storage">Contract Data</a>
           <a target="_blank" href="https://github.com/tacoinfra/harbinger-contracts">Harbinger Github</a>
         </h2>
+        <p :title="$store.prices['XTZ-USD'].end" class="has-text-centered">Contract Updated ~{{ humanFormat($store.prices['XTZ-USD'].end) }} Ago</p>
       </div>
     </div>
   </div>
@@ -35,6 +36,7 @@
 
 <script>
 import _ from 'lodash'
+import moment from 'moment'
 
 export default {
   name: 'Index',
@@ -42,11 +44,19 @@ export default {
   },
   data() {
     return {
+      currentTime: new Date(),
     }
   },
   mounted() {
+    setInterval(() => {
+      this.currentTime = new Date()
+    }, 1000)
   },
   methods: {
+    humanFormat(date) {
+      const age = moment.duration(moment(this.currentTime) - moment(date))
+      return age.humanize()
+    },
     numberWithCommas(x) {
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     },
