@@ -12,7 +12,7 @@ export default {
   mounted() {
     this.ws = new ReconnectingWebSocket(`${((window.location.protocol === 'https:') ? 'wss://' : 'ws://') + window.location.host}/ws/`);
     this.ws.onmessage = (message) => {
-      this.$bus.$emit(message.data)
+      this.$bus.$emit('message', message.data)
     }
     this.$bus.$on('heartbeat', () => {
       this.ws.send('heartbeat')

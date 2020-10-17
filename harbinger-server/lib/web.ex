@@ -26,7 +26,7 @@ defmodule Harbinger.Router do
   def get_init_state() do
     Jason.encode!(%{
       prices: Harbinger.Worker.prices,
-      connected_count: Registry.count(Registry.PingServer),
+      connected_count: Registry.count(Registry.ClientMessageBus),
     })
   end
 end

@@ -1,4 +1,4 @@
-defmodule PingServer do
+defmodule Harbinger do
   use Application
 
   def start(_type, _args) do
@@ -14,12 +14,12 @@ defmodule PingServer do
       ),
       Registry.child_spec(
         keys: :duplicate,
-        name: Registry.PingServer
+        name: Registry.ClientMessageBus
       ),
       Harbinger.Worker
     ]
 
-    opts = [strategy: :one_for_one, name: PingServer.Application]
+    opts = [strategy: :one_for_one, name: Harbinger.Application]
     Supervisor.start_link(children, opts)
   end
 

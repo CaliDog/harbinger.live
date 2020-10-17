@@ -10,26 +10,10 @@ defmodule Harbinger.SocketHandler do
   def websocket_init(state) do
     broadcast_message("new_connection")
 
-    Registry.PingServer
+    Registry.ClientMessageBus
       |> Registry.register("broadcast", {})
 
     Logger.info("New client connected #{state.headers["cf-connecting-ip"]} - #{state.headers["cf-ipcountry"]} - #{state.headers["user-agent"]}")
-
-    {:ok, state}
-  end
-
-  def websocket_handle({:text, "heartbeat"}, state) do
-    Logger.info("Received ping from #{state.headers["cf-connecting-ip"]} - #{state.headers["cf-ipcountry"]}")
-
-    broadcast_message("ping")
-
-    {:ok, state}
-  end
-
-  def websocket_handle({:text, "ping"}, state) do
-    Logger.info("Received ping from #{state.headers["cf-connecting-ip"]} - #{state.headers["cf-ipcountry"]}")
-
-    broadcast_message("ping")
 
     {:ok, state}
   end
@@ -48,7 +32,7 @@ defmodule Harbinger.SocketHandler do
   end
 
   def broadcast_message(message) do
-    Registry.PingServer
+    Registry.ClientMessageBus
     |> Registry.dispatch("broadcast", fn(entries) ->
       for {pid, _} <- entries do
         if pid != self() do

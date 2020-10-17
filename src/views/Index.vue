@@ -1,12 +1,18 @@
 <template>
   <div class="index is-dark">
     <div class="titles container">
-      <h1 class="title has-text-white is-1">Harbinger Price Oracle ⚖️</h1>
+      <h1 class="title has-text-white is-1">Harbinger Price Oracle <span class="scale">⚖️</span></h1>
       <h2 class="subtitle has-text-white">Enabling Defi on the <span class="inline-icon"><img src="../assets/XTZ-USD.png"></span>Tezos Blockchain</h2>
     </div>
     <div class="container is-flex">
       <div class="box ticker-info">
         <h2 class="title is-3 has-text-centered is-marginless">Latest Prices</h2>
+        <h2 class="subtitle has-text-centered is-marginless">Coinbase Pro</h2>
+
+        <div class="contract-refresh has-text-centered">
+          <progress class="progress is-marginless is-success" :value="3600 - Math.floor(timeDelta() / 1000)" max="3600">{{ numberWithCommas(3600 - Math.floor(timeDelta() / 1000)) }} sec</progress>
+          <p class="help">Contract Data Refreshes In {{ contractRefresh() }} <span v-if="Math.floor(timeDelta() / 1000) > 1">(~{{ Math.floor(timeDelta() / 1000) }} seconds)</span></p>
+        </div>
 
         <table class="table is-hoverable is-fullwidth">
           <tbody>
@@ -14,10 +20,10 @@
               <td class="">
                 <span><img :src="iconURL(pair[0])" /></span>
               </td>
-              <td>
+              <td class="has-text-centered">
                 <p class="ticker">{{pair[0]}}</p>
               </td>
-              <td>
+              <td class="has-text-centered">
                 <p class="price">${{ numberWithCommas((pair[1].close / 1000000).toFixed(2)) }}</p>
               </td>
             </tr>
@@ -26,7 +32,7 @@
         <h2 class="subtitle is-6 has-text-centered links">
           <a target="_blank" href="https://better-call.dev/mainnet/KT1Jr5t9UvGiqkvvsuUbPJHaYx24NzdUwNW9/operations">View Contract</a>
           <a target="_blank" href="https://better-call.dev/mainnet/KT1Jr5t9UvGiqkvvsuUbPJHaYx24NzdUwNW9/storage">Contract Data</a>
-          <a target="_blank" href="https://github.com/tacoinfra/harbinger-contracts">Harbinger Github</a>
+          <a target="_blank" href="https://github.com/tacoinfra/harbinger">Harbinger Github</a>
         </h2>
         <p :title="$store.prices['XTZ-USD'].end" class="has-text-centered">Contract Updated ~{{ humanFormat($store.prices['XTZ-USD'].end) }} Ago</p>
       </div>
@@ -44,17 +50,43 @@ export default {
   },
   data() {
     return {
-      currentTime: new Date(),
+      currentTime: moment(new Date()),
+      refreshTime: moment(this.$store.prices['XTZ-USD'].end).add(1, 'hour'),
     }
   },
   mounted() {
     setInterval(() => {
-      this.currentTime = new Date()
+      this.currentTime = moment(new Date())
     }, 1000)
+
+    this.$bus.$on('message', (messageData) => {
+      const payload = JSON.parse(messageData)
+      if (payload.type === 'oracleDataUpdate') {
+        debugger
+        this.$set(this.$store, 'prices', payload.state)
+      }
+    })
   },
   methods: {
+    contractRefresh() {
+      const delta = this.timeDelta()
+
+      if (delta < 0) {
+        return 'A Few Moments'
+      }
+
+      const humanDuration = moment
+        .duration(delta)
+        .humanize()
+        .replace(/\b\w/g, (l) => l.toUpperCase())
+
+      return `Roughly ${humanDuration}`
+    },
+    timeDelta() {
+      return this.refreshTime - this.currentTime
+    },
     humanFormat(date) {
-      const age = moment.duration(moment(this.currentTime) - moment(date))
+      const age = moment.duration(this.currentTime - moment(date))
       return age.humanize()
     },
     numberWithCommas(x) {
@@ -82,6 +114,21 @@ export default {
     min-height: 100vh;
     background: $blue;
     padding: 3rem;
+    @include until($desktop) {
+      padding: 0;
+      .titles{
+        max-width: 90vw !important;
+        padding: 1rem;
+      }
+      .ticker-info{
+        min-width: 0 !important;
+      }
+    }
+    @include until($tablet){
+      .scale{
+        display: none;
+      }
+    }
     .titles{
       max-width: 50vw;
       margin-bottom: 2rem;
@@ -91,6 +138,13 @@ export default {
     }
     .links a{
       padding: 1rem;
+    }
+    .contract-refresh{
+      margin-bottom: .5rem;
+      margin-top: .5rem;
+      progress{
+
+      }
     }
     .inline-icon img{
       max-width: 1rem;

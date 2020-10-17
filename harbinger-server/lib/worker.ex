@@ -6,8 +6,10 @@ defmodule Harbinger.Worker do
   @server "https://mainnet.smartpy.io/"
 
   @oracle_contract "KT1Jr5t9UvGiqkvvsuUbPJHaYx24NzdUwNW9"
+  @normalizer_contract "KT1AdbYiPYb5hDuEuVrfxmFehtnBCXv4Np7r"
 
   @map_get_endpoint "/chains/main/blocks/head/context/contracts/#{@oracle_contract}/big_map_get"
+  @storage_list_endpoint "/chains/main/blocks/head/context/contracts/#{@normalizer_contract}/storage"
 
   @request_url "#{@server}#{@map_get_endpoint}"
 
@@ -118,6 +120,8 @@ defmodule Harbinger.Worker do
 
   def update(state) do
     updated_state = look_for_update(state)
+
+    Harbinger.SocketHandler.broadcast_message(%{type: "oracleDataUpdate", state: updated_state} |> Jason.encode!)
 
     schedule_callback()
 
