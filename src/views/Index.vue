@@ -62,8 +62,8 @@ export default {
     this.$bus.$on('message', (messageData) => {
       const payload = JSON.parse(messageData)
       if (payload.type === 'oracleDataUpdate') {
-        debugger
         this.$set(this.$store, 'prices', payload.state)
+        this.refreshTime = moment(this.$store.prices['XTZ-USD'].end).add(1, 'hour')
       }
     })
   },
