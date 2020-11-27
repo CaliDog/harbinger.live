@@ -4,7 +4,8 @@ defmodule Harbinger.Worker do
   use GenServer
 
   #@server "https://mainnet.smartpy.io"
-  @server "https://rpc.tzbeta.net"
+  #@server "https://rpc.tzbeta.net"
+  @server "https://mainnet-tezos.giganode.io"
 
   @oracle_contract "KT1Jr5t9UvGiqkvvsuUbPJHaYx24NzdUwNW9"
   @normalizer_contract "KT1AdbYiPYb5hDuEuVrfxmFehtnBCXv4Np7r"
