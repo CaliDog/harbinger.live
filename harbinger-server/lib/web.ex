@@ -1,5 +1,6 @@
 defmodule Harbinger.Router do
   use Plug.Router
+  use Sentry.PlugCapture
 
   plug Plug.Static,
        at: "/",
@@ -10,6 +11,8 @@ defmodule Harbinger.Router do
        pass: ["application/json"],
        json_decoder: Jason
 
+  plug Sentry.PlugContext
+
   plug :dispatch
 
   @index_template File.read!("../dist/index.html")
@@ -17,6 +20,10 @@ defmodule Harbinger.Router do
   get "/" do
     response = EEx.eval_string(@index_template, assigns: [context: get_init_state()])
     send_resp(conn, 200, response)
+  end
+
+  get "/boom" do
+    1 / 0
   end
 
   match _ do

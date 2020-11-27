@@ -26,7 +26,8 @@ defmodule Harbinger.MixProject do
       {:plug, "~> 1.7"},
       {:plug_cowboy, "~> 2.0"},
       {:jason, "~> 1.1"},
-      {:httpoison, "~> 1.6"}
+      {:httpoison, "~> 1.6"},
+      {:sentry, "~> 8.0"},
     ]
   end
 end

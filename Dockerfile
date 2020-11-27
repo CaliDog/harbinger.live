@@ -2,11 +2,13 @@ FROM elixir
 
 WORKDIR /app
 
+ENV MIX_HOME=/opt/mix
+ENV MIX_ENV=prod
+
 RUN curl -sL https://deb.nodesource.com/setup_12.x  | bash -
 
 RUN apt-get install -y nodejs
 
-ENV MIX_HOME=/opt/mix
 RUN mix local.hex --force && mix local.rebar --force
 
 COPY package*.json ./
