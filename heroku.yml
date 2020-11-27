@@ -3,4 +3,4 @@ build:
     web: Dockerfile
 
 run:
-  web: cd harbinger-server && mix run --no-halt
+  web: cd harbinger-server && MIX_ENV=prod mix run --no-halt
