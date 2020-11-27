@@ -3,7 +3,8 @@ require Logger
 defmodule Harbinger.Worker do
   use GenServer
 
-  @server "https://mainnet.smartpy.io/"
+  #@server "https://mainnet.smartpy.io"
+  @server "https://rpc.tzbeta.net"
 
   @oracle_contract "KT1Jr5t9UvGiqkvvsuUbPJHaYx24NzdUwNW9"
   @normalizer_contract "KT1AdbYiPYb5hDuEuVrfxmFehtnBCXv4Np7r"
