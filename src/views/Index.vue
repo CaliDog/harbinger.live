@@ -51,7 +51,7 @@ export default {
   data() {
     return {
       currentTime: moment(new Date()),
-      refreshTime: moment(this.$store.prices['XTZ-USD'].end).add(1, 'hour'),
+      refreshTime: moment(this.$store.prices['XTZ-USD'].end).add(15, 'minutes'),
     }
   },
   mounted() {
@@ -63,7 +63,7 @@ export default {
       const payload = JSON.parse(messageData)
       if (payload.type === 'oracleDataUpdate') {
         this.$set(this.$store, 'prices', payload.state)
-        this.refreshTime = moment(this.$store.prices['XTZ-USD'].end).add(1, 'hour')
+        this.refreshTime = moment(this.$store.prices['XTZ-USD'].end).add(15, 'minutes')
       }
     })
   },
