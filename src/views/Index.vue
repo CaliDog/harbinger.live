@@ -10,7 +10,7 @@
         <h2 class="subtitle has-text-centered is-marginless">Coinbase Pro</h2>
 
         <div class="contract-refresh has-text-centered">
-          <progress class="progress is-marginless is-success" :value="3600 - Math.floor(timeDelta() / 1000)" max="3600">{{ numberWithCommas(3600 - Math.floor(timeDelta() / 1000)) }} sec</progress>
+          <progress class="progress is-marginless is-success" :value="900 - Math.floor(timeDelta() / 1000)" max="900">{{ numberWithCommas(900 - Math.floor(timeDelta() / 1000)) }} sec</progress>
           <p class="help">Contract Data Refreshes In {{ contractRefresh() }} <span v-if="Math.floor(timeDelta() / 1000) > 1">(~{{ Math.floor(timeDelta() / 1000) }} seconds)</span></p>
         </div>
 
