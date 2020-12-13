@@ -60,7 +60,7 @@ export default {
       tooltipProps: {
         formatter(val) {
           const value = (val.value / 1000000)
-          return `$${Math.trunc(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}.${(value % 1).toString().substr(2,4)}`
+          return `$${Math.trunc(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}.${(value % 1).toString().substr(2, 4)}`
         },
       },
     }
