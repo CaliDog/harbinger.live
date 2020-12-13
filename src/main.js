@@ -1,6 +1,10 @@
 import Vue from 'vue';
+import Sparkline from 'vue-sparklines'
+
 import App from './App.vue';
 import router from './router';
+
+Vue.use(Sparkline)
 
 Vue.config.productionTip = false;
 

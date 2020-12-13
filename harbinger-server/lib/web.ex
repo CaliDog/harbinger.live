@@ -22,18 +22,12 @@ defmodule Harbinger.Router do
     send_resp(conn, 200, response)
   end
 
-  get "/boom" do
-    1 / 0
-  end
-
   match _ do
     send_resp(conn, 404, "404")
   end
-
   def get_init_state() do
     Jason.encode!(%{
-      prices: Harbinger.Worker.prices,
-      connected_count: Registry.count(Registry.ClientMessageBus),
+      prices: Harbinger.Worker.prices
     })
   end
 end

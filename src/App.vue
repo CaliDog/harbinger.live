@@ -14,14 +14,9 @@ export default {
     this.ws.onmessage = (message) => {
       this.$bus.$emit('message', message.data)
     }
-    this.$bus.$on('heartbeat', () => {
-      this.ws.send('heartbeat')
-      this.$store.processed_beats += 1
-    })
 
-    setInterval(() => {
-      this.ws.send('.')
-    }, 10 * 1000)
+    // Heartbeat/keepalive
+    setInterval(() => { this.ws.send('.') }, 10 * 1000)
   },
   methods: {
   },

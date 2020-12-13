@@ -16,7 +16,7 @@
 
         <table class="table is-hoverable is-fullwidth">
           <tbody>
-            <tr class="pair-info" :key="pair[0]" v-for="pair in sorted($store.prices)">
+            <tr class="pair-info" :key="pair[0]" v-for="pair in sorted($store.prices['Coinbase Pro'])">
               <td class="">
                 <span><img :src="iconURL(pair[0])" /></span>
               </td>
@@ -24,7 +24,12 @@
                 <p class="ticker">{{pair[0]}}</p>
               </td>
               <td class="has-text-centered">
-                <p class="price">${{ numberWithCommas((pair[1].close / 1000000).toFixed(2)) }}</p>
+                <p class="price">${{ numberWithCommas((pair[1].computedPrice / 1000000).toFixed(2)) }}</p>
+              </td>
+              <td>
+                <sparkline :tooltipProps="tooltipProps">
+                  <sparklineCurve :styles="{stroke: strokeColor(pair[1])}" :refLineType="false" :refLineStyles="{}" :data="sparkData(pair[1])" :limit="pair[1].priceHistory.length" />
+                </sparkline>
               </td>
             </tr>
           </tbody>
@@ -34,7 +39,7 @@
           <a target="_blank" href="https://better-call.dev/mainnet/KT1Jr5t9UvGiqkvvsuUbPJHaYx24NzdUwNW9/storage">Contract Data</a>
           <a target="_blank" href="https://github.com/tacoinfra/harbinger">Harbinger Github</a>
         </h2>
-        <p :title="$store.prices['XTZ-USD'].end" class="has-text-centered">Contract Updated ~{{ humanFormat($store.prices['XTZ-USD'].end) }} Ago</p>
+        <p :title="$store.prices['Coinbase Pro']['XTZ-USD'].lastUpdate" class="has-text-centered">Contract Updated ~{{ humanFormat($store.prices['Coinbase Pro']['XTZ-USD'].lastUpdate) }} Ago</p>
       </div>
     </div>
   </div>
@@ -51,7 +56,13 @@ export default {
   data() {
     return {
       currentTime: moment(new Date()),
-      refreshTime: moment(this.$store.prices['XTZ-USD'].end).add(15, 'minutes'),
+      refreshTime: moment(this.$store.prices['Coinbase Pro']['XTZ-USD'].lastUpdate).add(15, 'minutes'),
+      tooltipProps: {
+        formatter(val) {
+          const value = (val.value / 1000000)
+          return `$${Math.trunc(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}.${(value % 1).toString().substr(2,4)}`
+        },
+      },
     }
   },
   mounted() {
@@ -63,11 +74,24 @@ export default {
       const payload = JSON.parse(messageData)
       if (payload.type === 'oracleDataUpdate') {
         this.$set(this.$store, 'prices', payload.state)
-        this.refreshTime = moment(this.$store.prices['XTZ-USD'].end).add(15, 'minutes')
+        this.refreshTime = moment(this.$store.prices['Coinbase Pro']['XTZ-USD'].lastUpdate).add(15, 'minutes')
       }
     })
   },
   methods: {
+    strokeColor(pair) {
+      const previousPrices = this.previousPrices(pair)
+      if (previousPrices[0] < previousPrices[previousPrices.length - 1]) {
+        return '#00d1b2'
+      }
+      return '#ff3860'
+    },
+    sparkData(pair) {
+      return this.previousPrices(pair)
+    },
+    previousPrices(pair) {
+      return pair.priceHistory.map((price, index) => price / pair.volumeHistory[index])
+    },
     contractRefresh() {
       const delta = this.timeDelta()
 
@@ -95,7 +119,7 @@ export default {
     sorted(payload) {
       return _(payload)
         .toPairs()
-        .sortBy(1, (item) => item[1].close)
+        .sortBy(1, (item) => item[1].computedPrice)
         .reverse()
         .value()
     },

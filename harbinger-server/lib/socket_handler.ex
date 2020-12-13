@@ -8,8 +8,6 @@ defmodule Harbinger.SocketHandler do
   end
 
   def websocket_init(state) do
-    broadcast_message("new_connection")
-
     Registry.ClientMessageBus
       |> Registry.register("broadcast", {})
 
@@ -42,9 +40,8 @@ defmodule Harbinger.SocketHandler do
     end)
   end
 
-  def terminate(reason, partial_req, state) do
+  def terminate(_reason, _partial_req, state) do
     Logger.info("Client disconnected #{state.headers["cf-connecting-ip"]} - #{state.headers["cf-ipcountry"]} - #{state.headers["user-agent"]}")
-    broadcast_message("disconnected_client")
     :ok
   end
 

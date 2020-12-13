@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "dev-build": "vue-cli-service build --watch",
+    "dev-build": "vue-cli-service build --mode development --watch",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -15,7 +15,8 @@
     "moment": "^2.29.1",
     "reconnecting-websocket": "^4.4.0",
     "vue": "^2.6.11",
-    "vue-router": "^3.2.0"
+    "vue-router": "^3.2.0",
+    "vue-sparklines": "^0.2.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.4.0",
