@@ -166,9 +166,6 @@ export default {
     .contract-refresh{
       margin-bottom: .5rem;
       margin-top: .5rem;
-      progress{
-
-      }
     }
     .inline-icon img{
       max-width: 1rem;
